@@ -42,83 +42,76 @@ string lettersOnly(string s) {
 
 //this function encode all the alphabet into codes
 string encode(string s) {
-    string result = "aaaaaaa";
+    string result;
     for (int i = 0; i < s.length(); i++) {
         // digit is 0
         if ((toUpperCase(s[i]) == 'A') || (toUpperCase(s[i]) == 'E') || (toUpperCase(s[i]) == 'I') || (toUpperCase(s[i]) == 'O') || (toUpperCase(s[i]) == 'U') || (toUpperCase(s[i]) == 'H') || (toUpperCase(s[i]) == 'W') || (toUpperCase(s[i]) == 'Y')){
-            result[i] = '0';
+            result[i] += '0';
         }
         else if((toUpperCase(s[i]) == 'B') || (toUpperCase(s[i]) == 'F') || (toUpperCase(s[i]) == 'P') || (toUpperCase(s[i]) == 'V')){
-            result[i] = '1';
+            result[i] += '1';
         }
         else if((toUpperCase(s[i]) == 'C') || (toUpperCase(s[i]) == 'G') || (toUpperCase(s[i]) == 'J') || (toUpperCase(s[i]) == 'K') || (toUpperCase(s[i]) == 'Q') || (toUpperCase(s[i]) == 'S') || (toUpperCase(s[i]) == 'X') || (toUpperCase(s[i]) == 'Z')){
-            result[i] = '2';
+            result[i] += '2';
         }
         else if((toUpperCase(s[i]) == 'D') || (toUpperCase(s[i]) == 'T')) {
-            result[i] = '3';
+            result[i] += '3';
         }
         else if((toUpperCase(s[i]) == 'L')) {
-            result[i] = '4';
+            result[i] += '4';
         }
         else if((toUpperCase(s[i]) == 'M') || (toUpperCase(s[i]) == 'N')){
-            result[i] = '5';
+            result[i] += '5';
         }
         else if((toUpperCase(s[i]) == 'R')){
-            result[i] = '6';
+            result[i] += '6';
         }
 
     }
     return result;
 }
-//this function is correct except the fact that the string can not dynamically get memory. so you have to pre-set its size.
+
 string coalesce(string s) {
+ /*
     Vector <int> result_temp;
     for(int i = 0; i < s.length(); i++){
         result_temp.add( s[i] );
     }
-    int k = 0;
-    for(int i = 0; i < s.length(); i++){
-        if( (k+1) >= result_temp.size() ){
-            break;
-        }
-        if(result_temp[k] == result_temp[k+1]){
-            result_temp.remove(k);
-        }
-        else{
-            k++;
+*/
+    for(int i = 1; i < s.length(); i++){
+        if(s[i] == s[i-1]){
+            s.erase(i-1,1);
         }
     }
-    string result = "aaa";
-    for(int i = 0; i < result_temp.size(); i++){
-        result[i] = result_temp[i];
-    }
-    return result;
+    return s;
 }
 //this function is used to replace the first number with a character and remove all the 0s
 string replace(string s,string name) {
-    Vector <int> s_temp;
-    s_temp.add(toUpperCase(name[0]));
+    string result;
+    result += name[0];
     for(int i = 1; i < s.length(); i++){
         if(s[i] != 0){
-            s_temp.add(s[i]);
+            result += s[i];
         }
     }
-    string result;
-    //s_temp is what we want(vector version),we need to transform it into string version
+    return result;
 }
 
 //this function is used to adjust the length of the string
 
 string makelength(string s) {
     if(s.length() > 4){
-        //truncate the string
+        s.erase(4);//truncate the string
     }
-    else if(s.length() < 4) {
-        //prolong it to 4
+    while(true){
+        if(s.length() == 4) {
+            break;
+        }
+        s += '0';
     }
+    return s;
 }
 
-//except for the dynamic string, this function is correct
 
 /* TODO: Replace this comment with a descriptive function
  * header comment.
@@ -128,7 +121,6 @@ string soundex(string s) {
     // s is the name
     return makelength(replace(coalesce(encode(lettersOnly(s))),s));
 }
-
 
 /* TODO: Replace this comment with a descriptive function
  * header comment.
