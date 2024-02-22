@@ -46,25 +46,25 @@ string encode(string s) {
     for (int i = 0; i < s.length(); i++) {
         // digit is 0
         if ((toUpperCase(s[i]) == 'A') || (toUpperCase(s[i]) == 'E') || (toUpperCase(s[i]) == 'I') || (toUpperCase(s[i]) == 'O') || (toUpperCase(s[i]) == 'U') || (toUpperCase(s[i]) == 'H') || (toUpperCase(s[i]) == 'W') || (toUpperCase(s[i]) == 'Y')){
-            result[i] += '0';
+            result += '0';
         }
         else if((toUpperCase(s[i]) == 'B') || (toUpperCase(s[i]) == 'F') || (toUpperCase(s[i]) == 'P') || (toUpperCase(s[i]) == 'V')){
-            result[i] += '1';
+            result += '1';
         }
         else if((toUpperCase(s[i]) == 'C') || (toUpperCase(s[i]) == 'G') || (toUpperCase(s[i]) == 'J') || (toUpperCase(s[i]) == 'K') || (toUpperCase(s[i]) == 'Q') || (toUpperCase(s[i]) == 'S') || (toUpperCase(s[i]) == 'X') || (toUpperCase(s[i]) == 'Z')){
-            result[i] += '2';
+            result += '2';
         }
         else if((toUpperCase(s[i]) == 'D') || (toUpperCase(s[i]) == 'T')) {
-            result[i] += '3';
+            result += '3';
         }
         else if((toUpperCase(s[i]) == 'L')) {
-            result[i] += '4';
+            result += '4';
         }
         else if((toUpperCase(s[i]) == 'M') || (toUpperCase(s[i]) == 'N')){
-            result[i] += '5';
+            result += '5';
         }
         else if((toUpperCase(s[i]) == 'R')){
-            result[i] += '6';
+            result += '6';
         }
 
     }
@@ -81,6 +81,7 @@ string coalesce(string s) {
     for(int i = 1; i < s.length(); i++){
         if(s[i] == s[i-1]){
             s.erase(i-1,1);
+            i = i-1;
         }
     }
     return s;
@@ -88,9 +89,9 @@ string coalesce(string s) {
 //this function is used to replace the first number with a character and remove all the 0s
 string replace(string s,string name) {
     string result;
-    result += name[0];
+    result += toUpperCase(name[0]);
     for(int i = 1; i < s.length(); i++){
-        if(s[i] != 0){
+        if(s[i] != '0'){
             result += s[i];
         }
     }
@@ -122,6 +123,7 @@ string soundex(string s) {
     return makelength(replace(coalesce(encode(lettersOnly(s))),s));
 }
 
+
 /* TODO: Replace this comment with a descriptive function
  * header comment.
  */
@@ -144,15 +146,17 @@ void soundexSearch(string filepath) {
     cout << "Enter a name you want to search" << endl;
     getLine(cin, name);
     string namecode = soundex(name);
+    cout << namecode << endl;
     Vector <string> match_name;
     for(int i = 0; i < allNames.size(); i++) {
         if( soundex(allNames[i]) == namecode ) {
             match_name.add(allNames[i]);
         }
     }
+    match_name.sort();
     // match_name contains all the names that have the same code with name
 
-    cout << match_name.sort() << endl;
+    cout << match_name <<endl;
 
 }
 
@@ -160,7 +164,8 @@ void soundexSearch(string filepath) {
 /* * * * * * Test Cases * * * * * */
 
 // TODO: add your STUDENT_TEST test cases here!
-/*
+
+
 STUDENT_TEST("Test extraction by my examples 1") {
     string s = "  ab cc   ";
     string result = lettersOnly(s);
@@ -171,7 +176,7 @@ STUDENT_TEST("test extraction by my examples 2") {
     string result = lettersOnly(s);
     EXPECT_EQUAL(result, "");
 }
-*/
+
 
 STUDENT_TEST("test the encoding part eg1") {
     string s = "Curie";
@@ -179,15 +184,19 @@ STUDENT_TEST("test the encoding part eg1") {
     EXPECT_EQUAL(result, encode(lettersOnly(s)));
 }
 STUDENT_TEST("test the encoding part eg2") {
-    string s = "O'Conner";
-    string result = "O205506";
+    string s = "Iverson";
+    string result = "0106205";
+    EXPECT_EQUAL(result, encode(lettersOnly(s)));
+}
+STUDENT_TEST("test the encoding part eg3") {
+    string s = "hanrahan";
+    string result = "00560005";
     EXPECT_EQUAL(result, encode(lettersOnly(s)));
 }
 
-
-STUDENT_TEST("test the coalesce part 00223") {
-    string s = "00223";
-    string result = "023";
+STUDENT_TEST("test the coalesce part 00560005") {
+    string s = "00560005";
+    string result = "05605";
     EXPECT_EQUAL(result, coalesce(s));
 }
 STUDENT_TEST("test the coalesce part 222025") {
@@ -200,6 +209,36 @@ STUDENT_TEST("test the coalesce part 222222") {
     string result = "2";
     EXPECT_EQUAL(result, coalesce(s));
 }
+/*
+STUDENT_TEST("Test the replace part eg1") {
+    string result = "A23451"
+    EXPECT_EQUAL(result,replace("2304501","Asa"));
+}
+
+STUDENT_TEST("Test the replace part eg2") {
+    string s = "0002050";
+    string name = "B";
+    string result = "B25";
+    EXPECT_EQUAL(result,replace(s,name));
+}
+*/
+STUDENT_TEST("Test the makelength part eg1") {
+    string s = "B589614";
+    string result = "B589";
+    EXPECT_EQUAL(result,makelength(s));
+}
+STUDENT_TEST("Test the makelength part eg2") {
+    string s = "A1";
+    string result = "A100";
+    EXPECT_EQUAL(result,makelength(s));
+}
+STUDENT_TEST("Test the makelength part eg3") {
+    string s = "F";
+    string result = "F000";
+    EXPECT_EQUAL(result,makelength(s));
+}
+
+
 /* Please not add/modify/remove the PROVIDED_TEST entries below.
  * Place your student tests cases above the provided tests.
  */
