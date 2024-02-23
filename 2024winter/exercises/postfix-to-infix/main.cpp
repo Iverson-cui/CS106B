@@ -110,4 +110,4 @@ void input(Vector <string> &input_expression) {
             cout << "That's invalid" << endl;
         }
     }
-}
+
